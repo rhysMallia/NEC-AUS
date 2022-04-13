@@ -2,12 +2,23 @@
 # Clean inputs from user
 # Ask user for name of playbook (?)
 
+# TO DO
+# RANDOMLY GENERATED PASSWORDS
+# SAVE THE USED IPS SOMEHOW
+# SIZE THE SUBNET CORRECTLY (BACK UP SUBNET)
+# AUTOMATICALLY ASSIGN IPS AND SAVE THEM TO DB
+# VARIABLES TO ASK FOR
+# HOSTNAME
+# 
+
 # Module imports
 import sys, json, subprocess
 
 # constants
 valuedict = {"ip": "", "dns": "", "ip_range": ""}
 ansiblestring = "ansible-playbook test.yml --extra-vars "
+
+
 
 # This function will check if the user wants to continue
 def usercheck():
