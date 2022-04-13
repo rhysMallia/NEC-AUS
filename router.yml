@@ -1,0 +1,7 @@
+- name: create config
+  hosts: local
+  tasks:
+    - name: copy default file (with permissions)
+      ansible.builtin.copy:
+      src: /templates/default.conf
+      dest: /configs/{{hostname}}.conf
