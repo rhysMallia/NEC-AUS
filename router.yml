@@ -1,7 +1,135 @@
-- name: create config
-  hosts: local
-  tasks:
-    - name: copy default file (with permissions)
-      ansible.builtin.copy:
-      src: /templates/default.conf
-      dest: /configs/{{hostname}}.conf
+- name: Create customized configuration file for {{hostname}}
+  gather_facts: false
+  hosts: localhost
+  connection: local
+  vars:
+    default: /root/NEC-AUS/configs/default.cfg
+    custom: /root/NEC-AUS/exports/{{folder}}/{{hostname}}.cfg
+  tasks:        
+        # Preconfiguration
+        - name: Check if exports is present
+          stat:
+            path: /root/NEC-AUS/exports
+          register: exports
+
+        - name: create new folder if exports unavailable
+          ansible.builtin.shell: mkdir /root/NEC-AUS/exports
+          when: not exports.stat.exists
+
+        - name: check if new folder is present
+          stat:
+                  path: /root/NEC-AUS/exports/{{folder}}
+          register: newFolder
+
+        - name: create new folder if {{folder}} unavailable
+          ansible.builtin.shell: mkdir /root/NEC-AUS/exports/{{folder}}
+          when: not newFolder.stat.exists 
+
+        - name: Copy blank file and create new configuration file
+          ansible.builtin.copy:
+            src: "{{default}}"
+            dest: "{{custom}}"
+        
+        # Header
+        - name: Replace HOSTNAME
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'hostname *'
+            line: hostname {{hostname}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        # Policy Map
+        - name: Replace POLICY
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"           
+            search_string: 'policy-map L2-TC2- *'
+            line: policy-map L2-TC2-{{policy}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace DESCRIPTION 
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'description *'
+            line: description {{desc}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace SHAPE AVERAGE
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'shape average *'
+            line: shape average {{shapeAvg1}} {{shapeAvg2}} 0 
+            owner: root
+            group: root
+            mode: '0644'
+        
+        # Interface - Loopback0 
+        - name: Replace IPADDRESS
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'ip address * 255.255.255.255'
+            line: ip address {{ipaddress}} 255.255.255.255
+            owner: root
+            group: root
+            mode: '0644'
+
+        # Interface - Tunnel
+        - name: Replace BANDWIDTH
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'bandwidth *'
+            line: bandwidth {{bandwidth}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace TUNNEL IPADDRESS
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'ip address * 255.255.255.252'
+            line: ip address  255.255.255.252
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace MD5 
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'md5 7'
+            line: md5 7 {{digestKey}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace SERVICE-POLICY-OUTPUT 
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'service-policy output L2-TC2- *'
+            line: service-policy output L2-TC2-{{policy}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        # Router OSPF 
+        - name: Replace ROUTER-ID
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'router-id *'
+            line: router-id {{ipaddress}} 
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace NETWORK
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'network * 0.0.0.0 area 0'
+            line: network {{ipaddress}} 0.0.0.0 area 0
+            owner: root
+            group: root
+            mode: '0644'

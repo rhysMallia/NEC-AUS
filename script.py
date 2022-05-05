@@ -1,6 +1,8 @@
 # TO DO
-#
-#
+# PE CONFIG GENERATION
+# ADD TUNNEL INFORMATION
+# GENERATE DESC
+# NETBOX IP(?)
 #
 #
 
@@ -8,6 +10,7 @@
 import sys, json, subprocess
 import pandas as pd
 import hashlib as hash
+import datetime
 
 #constants
 defaultFileName = "config"
@@ -20,10 +23,12 @@ playbook = "router.yml"
 vars = "--extra-vars"
 variableDict = {}
 variableArray = []
+folder = ""
 
 def main():
     #Either take user input, or begin scanning CSV
     fileInput()
+    generateFolder()
     executeScript()
 
     # For loop, set up varibles to send to 
@@ -49,8 +54,18 @@ def fileInput():
             #print(variableDict)
             check = True
 
+def generateFolder():
+    global folder
+    # get the date time 
+    x = datetime.datetime.now()
+    
+    # Convert into usable format and set as the global variable
+    folder = x.strftime("%H%M%d%B%Y")
+    
+
 def executeScript():
     global variableDict
+    global folder
 
     # Count maintains which device is currently being used
     count = 1
@@ -101,7 +116,7 @@ def executeScript():
         #print(digestKey)
         
         # Add to Dict object
-        #variableHolder['bandwidth'] = 1
+        variableHolder['hostname'] = str(hostname)
         variableHolder['bandwidth'] = str(bandwidth)
         variableHolder['desc'] = str(desc)
         variableHolder['ipaddress'] = str(ipAddress)
@@ -109,6 +124,7 @@ def executeScript():
         variableHolder['shapeAvg2'] = str(shapeAvg2)
         variableHolder['policy'] = str(policy)
         variableHolder['digestKey'] = str(digestKey)
+        variableHolder['folder'] = str(folder)
 
         print(variableHolder)
         # Convert dict object to json
