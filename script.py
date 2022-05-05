@@ -1,10 +1,16 @@
-# TO DO
+# TO DO (RHYS)
 # PE CONFIG GENERATION
 # ADD TUNNEL INFORMATION
 # GENERATE DESC
 # NETBOX IP(?)
 #
 #
+
+# TO DO (CHU)
+# LOGGING
+#   HOW LONG THIS SCRIPT TAKES TO RUN
+#   HOW MANY TIMES THIS HAS RUN
+#   TOTAL TIME SAVED
 
 # Module imports
 import sys, json, subprocess
@@ -25,16 +31,13 @@ variableDict = {}
 variableArray = []
 folder = ""
 
-def main():
-    #Either take user input, or begin scanning CSV
+def main(): 
     fileInput()
     generateFolder()
     executeScript()
-
-    # For loop, set up varibles to send to 
     
+# Checks if the file is present, if not asks for user imput
 def fileInput():
-
     # read default file    
     filename = defaultFileName + extension
     check = False
@@ -54,6 +57,7 @@ def fileInput():
             #print(variableDict)
             check = True
 
+# Generates a tailored folder to paste the generated CSV files
 def generateFolder():
     global folder
     # get the date time 
@@ -62,7 +66,7 @@ def generateFolder():
     # Convert into usable format and set as the global variable
     folder = x.strftime("%H%M%d%B%Y")
     
-
+# Generates the variables and sends them to the ansible playbook
 def executeScript():
     global variableDict
     global folder
@@ -75,12 +79,10 @@ def executeScript():
     ipRange = 0
     # IP address goes from 1 to 250
     ipAddr = 1
-
-    #print(variableDict)
-    #for index, row in variableDict.iterrows():
-    # [row][column]
+    # The length of the dict show us how many rows
     rows = len(variableDict)
     
+    # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
         # Router description
         desc = variableDict[1][rows]
@@ -149,6 +151,7 @@ def executeScript():
             ipAddr += 1
         count += 1
 
+# This function will ensure that the hostname will always be 3 digits with leading zeros
 def createHost(count):
     count = str(count)
     hostname = defaultHost
