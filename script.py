@@ -13,10 +13,13 @@
 #   TOTAL TIME SAVED
 
 # Module imports
+import logging
 import sys, json, subprocess
 import pandas as pd
 import hashlib as hash
 import datetime
+import time
+import secrets
 
 #constants
 defaultFileName = "config"
@@ -31,10 +34,13 @@ variableDict = {}
 variableArray = []
 folder = ""
 
-def main(): 
+def main():
+    t_start = time.perf_counter()
     fileInput()
     generateFolder()
     executeScript()
+    t_end = time.perf_counter()
+    print(f"script time: { t_end - t_start} seconds")
     
 # Checks if the file is present, if not asks for user imput
 def fileInput():
@@ -128,7 +134,7 @@ def executeScript():
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
 
-        print(variableHolder)
+        # print(variableHolder)
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
 
@@ -150,6 +156,7 @@ def executeScript():
         else:
             ipAddr += 1
         count += 1
+        print('config file '+hostname+' has been created.')
 
 # This function will ensure that the hostname will always be 3 digits with leading zeros
 def createHost(count):
