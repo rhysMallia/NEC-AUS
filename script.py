@@ -14,6 +14,7 @@
 
 # Module imports
 import sys, json, subprocess
+import time
 import pandas as pd
 import hashlib as hash
 import datetime
@@ -33,9 +34,12 @@ variableArray = []
 folder = ""
 
 def main(): 
+    t_start = time.perf_counter()
     fileInput()
     generateFolder()
     executeScript()
+    t_end = time.perf_counter()
+    print(f"script time: { t_end - t_start} seconds")
     
 # Checks if the file is present, if not asks for user imput
 def fileInput():
@@ -153,7 +157,7 @@ def executeScript():
         count += 1
 
 # This function will ensure that the hostname will always be 3 digits with leading zeros
-def createHost(count, config):
+def createHost(count):
     count = str(count)
 
     hostname = defaultHost
