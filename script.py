@@ -18,7 +18,6 @@ import sys, json, subprocess
 import pandas as pd
 import hashlib as hash
 import datetime
-import statisticS
 import time
 
 # constants
@@ -50,7 +49,6 @@ def fileInput():
     while not check:
         global variableDict
         variableDict = pd.read_csv(filename, header=None, skiprows=1, usecols=range(1, 3))
-        # print(variableDict)
         if variableDict.empty:
             # if the dict is empty, try to locate another file
             print("Unable to locate default config file.")
@@ -60,7 +58,6 @@ def fileInput():
         else:
             # if the dict is full, we can exit the loop
             # variableDict = variableDict.to_dict()
-            # print(variableDict)
             check = True
 
 
@@ -99,8 +96,7 @@ def executeScript():
         bandwidth = variableDict[2][rows]
         # Dict to turn into JSON
         variableHolder = {}
-        # print(desc)
-        # print(bandwidth)
+
 
         # Hostname
         hostname = createHost(count)
@@ -118,13 +114,7 @@ def executeScript():
         digestKey = hash.md5(temp.encode('utf-8')).hexdigest()
 
         # Testing prints
-        # print(bandwidth)
-        # print(desc)
-        # print(shapeAvg1)
-        # print(shapeAvg2)
-        # print(policy)
-        # print(ipAddress)
-        # print(digestKey)
+
 
         # Add to Dict object
         variableHolder['hostname'] = str(hostname)
@@ -147,9 +137,6 @@ def executeScript():
             capture_output=True, text=True
         )
 
-        # print the stdout and error to the console
-        # print("stdout: " + result.stdout)
-        # print("stderr: " + result.stderr)
 
         # Iterate nessicary counters
         if ipAddr >= 250:
@@ -187,7 +174,7 @@ def benchmark_output(count):
     for x in results:
         total = total + x[1]
 
-    return f'average time:{total/count:.4f}'
+    return f'total time:{total:.4f} seconds ,average time:{total/count:.4f} seconds'
 
 
 if __name__ == "__main__":
