@@ -133,7 +133,7 @@ def executeScript():
         variableHolder['folder'] = str(folder)
 
         #variableHolder['']
-        print(variableHolder)
+        #print(variableHolder)
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
 
@@ -145,8 +145,8 @@ def executeScript():
         )
 
         # print the stdout and error to the console
-        print("stdout: " + result.stdout)
-        print("stderr: " + result.stderr)
+       #print("stdout: " + result.stdout)
+        #print("stderr: " + result.stderr)
 
         # Iterate nessicary counters
         if ipAddr >= 250:
