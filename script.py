@@ -145,9 +145,9 @@ def executeScript():
             capture_output = True, text = True
         )
 
-        # print the stdout and error to the console
-        print("stdout: " + result.stdout)
-        print("stderr: " + result.stderr)
+        # # print the stdout and error to the console
+        # print("stdout: " + result.stdout)
+        # print("stderr: " + result.stderr)
 
         # Iterate nessicary counters
         if ipAddr >= 250:
