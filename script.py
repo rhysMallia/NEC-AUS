@@ -22,6 +22,7 @@ import datetime
 defaultFileName = "config"
 extension = ".csv"
 defaultHost = "CE"
+secondaryHost = "PE"
 ip = "172.28."
 tunnel = "10.255."
 ansible = "ansible-playbook"
@@ -90,33 +91,32 @@ def executeScript():
         bandwidth = variableDict[2][rows]
         # Dict to turn into JSON
         variableHolder = {}
-        #print(desc)
-        #print(bandwidth)
         
-        # Hostname
+        ## CE
+        # Hostname (ex. CE001)
         hostname = createHost(count)
         # Shape Averages THIS ISN'T WORKING 100%
         shapeAvg1 = int((bandwidth * 10**5) * 0.97)
         shapeAvg2 = int((bandwidth * 10**3) * 0.97)
-        # Policy Maps
+        # Policy Maps (ex. 10MB)
         policy = str(bandwidth) + "MB"
-        # IP address
+        # IP address (ex. 192.168.88.1)
         ipAddress = ip + str(ipRange) + "." + str(ipAddr) 
-        # tunnel bandwidth
+        # tunnel bandwidth (ex. 1000000)
         tunnelBandwidth = int((bandwidth * 10**3))
-        # MD5 Hash
+        # MD5 Hash (ex. 001100101001md)
         temp = (hostname + desc + str(ipAddress) + str(bandwidth))
         digestKey = hash.md5(temp.encode('utf-8')).hexdigest()
         
-        # Testing prints
-        #print(bandwidth)
-        #print(desc)
-        #print(shapeAvg1)
-        #print(shapeAvg2)
-        #print(policy)
-        #print(ipAddress)
-        #print(digestKey)
-        
+        ## PE
+        # Interface (ex. 101, 102)
+
+        # PE Address (ex. 10.255.0.9)
+
+        # PE Address 2 (ex. 10.255.0.13)
+
+        # Tunnel (ex. 10.2555.0.10)
+
         # Add to Dict object
         variableHolder['hostname'] = str(hostname)
         variableHolder['bandwidth'] = str(bandwidth)
@@ -128,6 +128,7 @@ def executeScript():
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
 
+        variableHolder['']
         print(variableHolder)
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
@@ -146,19 +147,21 @@ def executeScript():
         # Iterate nessicary counters
         if ipAddr >= 250:
             ipRange += 1
-            ipAddr = 1
+            #ipAddr = 1
         else:
             ipAddr += 1
         count += 1
 
 # This function will ensure that the hostname will always be 3 digits with leading zeros
-def createHost(count):
+def createHost(count, config):
     count = str(count)
+
     hostname = defaultHost
 
     while(len(count) < 3):
         count = "0" + count
     return hostname + count
+
 
 
 if __name__ == "__main__":

@@ -3,28 +3,10 @@
   hosts: localhost
   connection: local
   vars:
-    default: /root/NEC-AUS/configs/default.cfg
+    default: /root/NEC-AUS/configs/defaultPE.cfg
     custom: /root/NEC-AUS/exports/{{folder}}/{{hostname}}.cfg
-  tasks:        
-        # Preconfiguration
-        - name: Check if exports is present
-          stat:
-            path: /root/NEC-AUS/exports
-          register: exports
-
-        - name: create new folder if exports unavailable
-          ansible.builtin.shell: mkdir /root/NEC-AUS/exports
-          when: not exports.stat.exists
-
-        - name: check if new folder is present
-          stat:
-                  path: /root/NEC-AUS/exports/{{folder}}
-          register: newFolder
-
-        - name: create new folder if {{folder}} unavailable
-          ansible.builtin.shell: mkdir /root/NEC-AUS/exports/{{folder}}
-          when: not newFolder.stat.exists 
-
+  tasks: 
+        # Pre-configuration
         - name: Copy blank file and create new configuration file
           ansible.builtin.copy:
             src: "{{default}}"
@@ -34,51 +16,49 @@
         - name: Replace HOSTNAME
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'hostname *'
-            line: hostname {{hostname}}
+            search_string: '! Provider Edge Configurations for *'
+            line: Provider Edge Configurations for Customer {{count}} {{hostname}}
             owner: root
             group: root
             mode: '0644'
         
-        # Policy Map
-        - name: Replace POLICY
+        # Interface
+        - name: Replace INTERFACE 
           ansible.builtin.lineinfile:
             path: "{{custom}}"           
-            search_string: 'policy-map L2-TC2- *'
-            line: policy-map L2-TC2-{{policy}}
+            search_string: 'interface Ethernet0/0.10101'
+            line: interface Ethernet0/0.10{{interface}}
             owner: root
             group: root
             mode: '0644'
         
-        - name: Replace DESCRIPTION 
+        - name: Replace INTERFACE (ENCAPSULATION)
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'description *'
-            line: description {{desc}}
+            search_string: 'encapsulation dot1Q *'
+            line: encapsulation dot1Q {{interface}}
             owner: root
             group: root
             mode: '0644'
         
-        - name: Replace SHAPE AVERAGE
+        - name: Replace PEADDRESS
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'shape average *'
-            line: shape average {{shapeAvg1}} {{shapeAvg2}} 0 
+            search_string: ' ip address *** 255.255.255.252'
+            line:  ip address {{peaddress}} 255.255.255.252
             owner: root
             group: root
             mode: '0644'
-        
-        # Interface - Loopback0 
-        - name: Replace IPADDRESS
+        # Interface Tunnel
+        - name: Replace INTERFACE (TUNNEL)
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'ip address * 255.255.255.255'
-            line: ip address {{ipaddress}} 255.255.255.255
+            search_string: 'interface Tunnel10**'
+            line: interface Tunnel10{{interface}}
             owner: root
             group: root
             mode: '0644'
 
-        # Interface - Tunnel
         - name: Replace BANDWIDTH
           ansible.builtin.lineinfile:
             path: "{{custom}}"
@@ -88,48 +68,49 @@
             group: root
             mode: '0644'
 
-        - name: Replace TUNNEL IPADDRESS
+        - name: Replace PEADDRESS2
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'ip address * 255.255.255.252'
-            line: ip address  255.255.255.252
-            owner: root
-            group: root
-            mode: '0644'
-
-        - name: Replace MD5 
-          ansible.builtin.lineinfile:
-            path: "{{custom}}"
-            search_string: 'md5 7'
-            line: md5 7 {{digestKey}}
+            search_string: ' ip address ***** 255.255.255.252'
+            line:  ip address {{peaddress2}} 255.255.255.252
             owner: root
             group: root
             mode: '0644'
         
-        - name: Replace SERVICE-POLICY-OUTPUT 
+        - name: Replace TUNNEL SOURCE
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'service-policy output L2-TC2- *'
+            search_string: 'tunnel source ****'
+            line: tunnel source {{peaddress}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace TUNNEL SOURCE
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'tunnel destination ****'
+            line: tunnel destination {{tunnel}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace POLICY
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'service-policy output L2-TC2-*MB'
             line: service-policy output L2-TC2-{{policy}}
             owner: root
             group: root
             mode: '0644'
-
+        
         # Router OSPF 
-        - name: Replace ROUTER-ID
+        - name: Replace PEADDRESS2 (network)
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'router-id *'
-            line: router-id {{ipaddress}} 
+            search_string: 'network *** 0.0.0.0 area 0'
+            line:  network {{peaddress2}} 0.0.0.0 area 0 
             owner: root
             group: root
             mode: '0644'
 
-        - name: Replace NETWORK
-          ansible.builtin.lineinfile:
-            path: "{{custom}}"
-            search_string: 'network * 0.0.0.0 area 0'
-            line: network {{ipaddress}} 0.0.0.0 area 0
-            owner: root
-            group: root
-            mode: '0644'
