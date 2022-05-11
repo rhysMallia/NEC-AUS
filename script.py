@@ -132,7 +132,7 @@ def executeScript():
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
 
-        variableHolder['']
+        #variableHolder['']
         print(variableHolder)
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
