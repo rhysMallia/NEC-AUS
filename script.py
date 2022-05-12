@@ -91,7 +91,7 @@ def executeScript():
     interface = 100
     
     # Print statements for testing
-    print("Generating configuration files for device no." + count )
+    print("Generating configuration files for device no." + str(count) )
 
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
@@ -160,11 +160,11 @@ def executeScript():
         print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
 
-        result = subprocess.run(
+        result2 = subprocess.run(
             [ansible, pePlaybook, vars, variableHolder],
             capture_output = True, text = True
         )
-        print("stdout: " + result.stdout)
+        print("stdout: " + result2.stdout)
         #print("stderr: " + result.stderr)
         
         # Iterate nessicary counters
