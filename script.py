@@ -15,6 +15,7 @@
 # Module imports
 import csv
 import sys, json, subprocess
+import time
 import pandas as pd
 import hashlib as hash
 import datetime
@@ -24,23 +25,26 @@ import time
 defaultFileName = "config"
 extension = ".csv"
 defaultHost = "CE"
+secondaryHost = "PE"
 ip = "172.28."
 tunnel = "10.255."
 ansible = "ansible-playbook"
 playbook = "router.yml"
+pePlaybook = "PE.yml"
 vars = "--extra-vars"
 variableDict = {}
 variableArray = []
 folder = ""
 results = []
 
-
-def main():
+def main(): 
+    t_start = time.perf_counter()
     fileInput()
     generateFolder()
     executeScript()
-
-
+    t_end = time.perf_counter()
+    print(f"script time: { t_end - t_start} seconds")
+    
 # Checks if the file is present, if not asks for user imput
 def fileInput():
     # read default file    
@@ -86,6 +90,11 @@ def executeScript():
     ipAddr = 1
     # The length of the dict show us how many rows
     rows = len(variableDict)
+    # Interface counter
+    interface = 100
+    
+    # Print statements for testing
+    print("Generating CE configuration files for device no." + str(count) )
 
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
@@ -96,25 +105,34 @@ def executeScript():
         bandwidth = variableDict[2][rows]
         # Dict to turn into JSON
         variableHolder = {}
-
-
-        # Hostname
-        hostname = createHost(count)
+        
+        ## CE
+        # Hostname (ex. CE001, PE001)
+        hostname = createHost(count, True)
         # Shape Averages THIS ISN'T WORKING 100%
-        shapeAvg1 = int((bandwidth * 10 ** 5) * 0.97)
-        shapeAvg2 = int((bandwidth * 10 ** 3) * 0.97)
-        # Policy Maps
+        shapeAvg1 = int((bandwidth * 10**5) * 0.97)
+        shapeAvg2 = int((bandwidth * 10**3) * 0.97)
+        # Policy Maps (ex. 10MB)
         policy = str(bandwidth) + "MB"
-        # IP address
-        ipAddress = ip + str(ipRange) + "." + str(ipAddr)
-        # tunnel bandwidth
-        tunnelBandwidth = int((bandwidth * 10 ** 3))
-        # MD5 Hash
+        # IP address (ex. 192.168.88.1)
+        ipAddress = ip + str(ipRange) + "." + str(ipAddr) 
+        # tunnel bandwidth (ex. 1000000)
+        tunnelBandwidth = int((bandwidth * 10**3))
+        # MD5 Hash (ex. 001100101001md)
         temp = (hostname + desc + str(ipAddress) + str(bandwidth))
         digestKey = hash.md5(temp.encode('utf-8')).hexdigest()
+        
+        ## PE
+        # Hostname
+        hostname2 = createHost(count, False)
+        # Count
+        # Interface (ex. 101, 102)
+        interface += 1
+        # PE Address (ex. 10.255.0.9)
 
-        # Testing prints
+        # PE Address 2 (ex. 10.255.0.13)
 
+        # Tunnel (ex. 10.2555.0.10)
 
         # Add to Dict object
         variableHolder['hostname'] = str(hostname)
@@ -126,8 +144,15 @@ def executeScript():
         variableHolder['policy'] = str(policy)
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
-
-        # print(variableHolder)
+        
+        variableHolder['hostname2'] = str(hostname2)
+        variableHolder['count'] = str(count)
+        variableHolder['interface'] = str(interface) 
+        variableHolder['peaddress'] = ""
+        variableHolder['peaddress2'] = ""
+        variableHolder['tunnel'] = ""
+        #print(variableHolder)
+        
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
 
@@ -137,26 +162,43 @@ def executeScript():
             capture_output=True, text=True
         )
 
-
+        # print the stdout and error to the console
+        print("stdout: " + result.stdout)
+        #print("stderr: " + result.stderr)
+        
+        result = subprocess.run(
+            [ansible, pePlaybook, vars, variableHolder],
+            capture_output = True, text = True
+        )
+        print("stdout: " + result.stdout)
+        
         # Iterate nessicary counters
         if ipAddr >= 250:
             ipRange += 1
-            ipAddr = 1
+            #ipAddr = 1
         else:
             ipAddr += 1
+        
+        interface += 1
         count += 1
         print(benchmark(hostname, start))
     print(benchmark_output(count))
 
 
 # This function will ensure that the hostname will always be 3 digits with leading zeros
-def createHost(count):
+def createHost(count, check):
     count = str(count)
+
     hostname = defaultHost
 
     while (len(count) < 3):
         count = "0" + count
-    return hostname + count
+
+    if check:    
+        return hostname + count
+    else:
+        return secondaryHost + count
+
 
 
 def benchmark(hostname, start):

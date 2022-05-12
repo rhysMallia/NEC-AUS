@@ -1,0 +1,116 @@
+- name: Create customized PE config file for {{hostname2}}
+  gather_facts: false
+  hosts: localhost
+  connection: local
+  vars:
+    default: /root/NEC-AUS/configs/defaultPE.cfg
+    custom: /root/NEC-AUS/exports/{{folder}}/{{hostname2}}.cfg
+  tasks: 
+        # Pre-configuration
+        - name: Copy blank file and create new configuration file
+          ansible.builtin.copy:
+            src: "{{default}}"
+            dest: "{{custom}}"
+        
+        # Header
+        - name: Replace HOSTNAME
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: '! Provider Edge Configurations for *'
+            line: Provider Edge Configurations for Customer {{count}} {{hostname2}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        # Interface
+        - name: Replace INTERFACE 
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"           
+            search_string: 'interface Ethernet0/0.10101'
+            line: interface Ethernet0/0.10{{interface}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace INTERFACE (ENCAPSULATION)
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'encapsulation dot1Q *'
+            line: encapsulation dot1Q {{interface}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace PEADDRESS
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: ' ip address *** 255.255.255.252'
+            line:  ip address {{peaddress}} 255.255.255.252
+            owner: root
+            group: root
+            mode: '0644'
+        # Interface Tunnel
+        - name: Replace INTERFACE (TUNNEL)
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'interface Tunnel10**'
+            line: interface Tunnel10{{interface}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace BANDWIDTH
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'bandwidth *'
+            line: bandwidth {{bandwidth}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace PEADDRESS2
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: ' ip address ***** 255.255.255.252'
+            line:  ip address {{peaddress2}} 255.255.255.252
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace TUNNEL SOURCE
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'tunnel source ****'
+            line: tunnel source {{peaddress}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace TUNNEL SOURCE
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'tunnel destination ****'
+            line: tunnel destination {{tunnel}}
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace POLICY
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'service-policy output L2-TC2-*MB'
+            line: service-policy output L2-TC2-{{policy}}
+            owner: root
+            group: root
+            mode: '0644'
+        
+        # Router OSPF 
+        - name: Replace PEADDRESS2 (network)
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'network *** 0.0.0.0 area 0'
+            line:  network {{peaddress2}} 0.0.0.0 area 0 
+            owner: root
+            group: root
+            mode: '0644'
+

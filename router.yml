@@ -1,4 +1,4 @@
-- name: Create customized configuration file for {{hostname}}
+- name: Create customized CE config file for {{hostname}}
   gather_facts: false
   hosts: localhost
   connection: local
