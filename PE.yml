@@ -1,10 +1,10 @@
-- name: Create customized PE config file for {{hostname}}
+- name: Create customized PE config file for {{hostname2}}
   gather_facts: false
   hosts: localhost
   connection: local
   vars:
     default: /root/NEC-AUS/configs/defaultPE.cfg
-    custom: /root/NEC-AUS/exports/{{folder}}/{{hostname}}.cfg
+    custom: /root/NEC-AUS/exports/{{folder}}/{{hostname2}}.cfg
   tasks: 
         # Pre-configuration
         - name: Copy blank file and create new configuration file
@@ -17,7 +17,7 @@
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: '! Provider Edge Configurations for *'
-            line: Provider Edge Configurations for Customer {{count}} {{hostname}}
+            line: Provider Edge Configurations for Customer {{count}} {{hostname2}}
             owner: root
             group: root
             mode: '0644'

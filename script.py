@@ -91,7 +91,7 @@ def executeScript():
     interface = 100
     
     # Print statements for testing
-    print("Generating configuration files for device no." + str(count) )
+    print("Generating CE configuration files for device no." + str(count) )
 
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
@@ -103,8 +103,8 @@ def executeScript():
         variableHolder = {}
         
         ## CE
-        # Hostname (ex. CE001)
-        hostname = createHost(count)
+        # Hostname (ex. CE001, PE001)
+        hostname = createHost(count, True)
         # Shape Averages THIS ISN'T WORKING 100%
         shapeAvg1 = int((bandwidth * 10**5) * 0.97)
         shapeAvg2 = int((bandwidth * 10**3) * 0.97)
@@ -119,6 +119,8 @@ def executeScript():
         digestKey = hash.md5(temp.encode('utf-8')).hexdigest()
         
         ## PE
+        # Hostname
+        hostname2 = createHost(count, False)
         # Count
         # Interface (ex. 101, 102)
         interface += 1
@@ -138,7 +140,8 @@ def executeScript():
         variableHolder['policy'] = str(policy)
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
-
+        
+        variableHolder['hostname2'] = str(hostname2)
         variableHolder['count'] = str(count)
         variableHolder['interface'] = str(interface) 
         variableHolder['peaddress'] = ""
@@ -159,8 +162,13 @@ def executeScript():
         # print the stdout and error to the console
         #print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
+        
+        result = subprocess.run(
+            [ansible, pePlaybook, vars, variableHolder],
+            capture_output = True, text = True
+        )
 
-        runPE(variableHolder)
+        print("stdout: " + result.stdout)
         
         # Iterate nessicary counters
         if ipAddr >= 250:
@@ -172,28 +180,19 @@ def executeScript():
         interface += 1
         count += 1
 
-
-def runPE(variableHolder):
-    global variableDict
-    global folder
-    print("printing second config")
-    result = subprocess.run(
-    [ansible, pePlaybook, vars, variableHolder],
-    capture_output = True, text = True
-    )
-    print("stdout: " + result.stdout)
-
-
-
 # This function will ensure that the hostname will always be 3 digits with leading zeros
-def createHost(count):
+def createHost(count, check):
     count = str(count)
 
     hostname = defaultHost
 
     while(len(count) < 3):
         count = "0" + count
-    return hostname + count
+
+    if check:    
+        return hostname + count
+    else:
+        return secondaryHost + count
 
 
 
