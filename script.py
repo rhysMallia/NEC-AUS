@@ -160,12 +160,7 @@ def executeScript():
         #print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
 
-        result2 = subprocess.run(
-            [ansible, pePlaybook, vars, variableHolder],
-            capture_output = True, text = True
-        )
-        print("stdout: " + result2.stdout)
-        #print("stderr: " + result.stderr)
+        runPE(variableHolder)
         
         # Iterate nessicary counters
         if ipAddr >= 250:
@@ -176,6 +171,18 @@ def executeScript():
         
         interface += 1
         count += 1
+
+
+def runPE(variableHolder):
+    global variableDict
+    global folder
+    result = subprocess.run(
+    [ansible, pePlaybook, vars, variableHolder],
+    capture_output = True, text = True
+    )
+    print("stdout: " + result.stdout)
+
+
 
 # This function will ensure that the hostname will always be 3 digits with leading zeros
 def createHost(count):
