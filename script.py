@@ -157,7 +157,7 @@ def executeScript():
         )
 
         # print the stdout and error to the console
-        print("stdout: " + result.stdout)
+        #print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
 
         result2 = subprocess.run(
