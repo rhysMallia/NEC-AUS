@@ -90,6 +90,9 @@ def executeScript():
     # Interface counter
     interface = 100
     
+    # Print statements for testing
+    print("Generating configuration files for device no." + count )
+
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
         # Router description
