@@ -28,6 +28,7 @@ ip = "172.28."
 tunnel = "10.255."
 ansible = "ansible-playbook"
 playbook = "router.yml"
+pePlaybook = "PE.yml"
 vars = "--extra-vars"
 variableDict = {}
 variableArray = []
@@ -86,6 +87,8 @@ def executeScript():
     ipAddr = 1
     # The length of the dict show us how many rows
     rows = len(variableDict)
+    # Interface counter
+    interface = 100
     
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
@@ -114,7 +117,7 @@ def executeScript():
         
         ## PE
         # Interface (ex. 101, 102)
-
+        interface += 1
         # PE Address (ex. 10.255.0.9)
 
         # PE Address 2 (ex. 10.255.0.13)
@@ -132,8 +135,12 @@ def executeScript():
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
 
-        #variableHolder['']
+        variableHolder['interface'] = str(interface) 
+        variableHolder['peaddress'] = ""
+        variableHolder['peaddress2'] = ""
+        variableHolder['tunnel'] = ""
         #print(variableHolder)
+        
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
 
@@ -145,15 +152,24 @@ def executeScript():
         )
 
         # print the stdout and error to the console
-       #print("stdout: " + result.stdout)
+        print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
 
+        result = subprocess.run(
+            [ansible, pePlaybook, vars, variableHolder],
+            capture_output = True, text = True
+        )
+        print("stdout: " + result.stdout)
+        #print("stderr: " + result.stderr)
+        
         # Iterate nessicary counters
         if ipAddr >= 250:
             ipRange += 1
             #ipAddr = 1
         else:
             ipAddr += 1
+        
+        interface += 1
         count += 1
 
 # This function will ensure that the hostname will always be 3 digits with leading zeros
