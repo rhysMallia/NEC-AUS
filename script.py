@@ -176,6 +176,7 @@ def executeScript():
 def runPE(variableHolder):
     global variableDict
     global folder
+    print("printing second config")
     result = subprocess.run(
     [ansible, pePlaybook, vars, variableHolder],
     capture_output = True, text = True
