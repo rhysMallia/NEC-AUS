@@ -93,8 +93,7 @@ def executeScript():
     # Interface counter
     interface = 100
     
-    # Print statements for testing
-    print("Generating CE configuration files for device no." + str(count) )
+
 
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
@@ -156,6 +155,8 @@ def executeScript():
         # Convert dict object to json
         variableHolder = json.dumps(variableHolder)
 
+        # Print statements for testing
+        print("Generating CE configuration files for device no." + str(count) )
         # Send object to run ansible command
         result = subprocess.run(
             [ansible, playbook, vars, variableHolder],
@@ -166,6 +167,8 @@ def executeScript():
         print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
         
+        # Print statements for testing
+        print("Generating PE configuration files for device no." + str(count) )
         result = subprocess.run(
             [ansible, pePlaybook, vars, variableHolder],
             capture_output = True, text = True
