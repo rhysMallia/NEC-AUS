@@ -116,6 +116,7 @@ def executeScript():
         digestKey = hash.md5(temp.encode('utf-8')).hexdigest()
         
         ## PE
+        # Count
         # Interface (ex. 101, 102)
         interface += 1
         # PE Address (ex. 10.255.0.9)
@@ -135,6 +136,7 @@ def executeScript():
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
 
+        variableHolder['count'] = str(count)
         variableHolder['interface'] = str(interface) 
         variableHolder['peaddress'] = ""
         variableHolder['peaddress2'] = ""
