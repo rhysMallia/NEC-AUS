@@ -225,11 +225,10 @@ def benchmark(hostname, start):
     results.append(result)
     return f'config {hostname} generated, timelapse: {timelapse:.4f} seconds'
 
-
 def benchmark_output(count):
     global folder
     directory = '/exports/' + folder + '/benchmark.csv'
-    with open(directory, 'w', newline='') as file:
+    with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
     total = 0
@@ -237,7 +236,6 @@ def benchmark_output(count):
         total = total + x[1]
 
     return f'total time:{total:.4f} seconds ,average time:{total/count:.4f} seconds'
-
 
 if __name__ == "__main__":
     main()
