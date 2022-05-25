@@ -39,6 +39,7 @@ variableDict = {}
 variableArray = []
 folder = ""
 results = []
+total = 0.0
 ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ... in this beautiful country"
 
 def main(): 
@@ -240,18 +241,24 @@ def createHost(count, check):
         return secondaryHost + count
 
 def benchmark(hostname, start):
+    global total
     timelapse = time.perf_counter() - start
     result = [hostname, timelapse]
+    total += timelapse
     results.append(result)
     return f'config {hostname} generated, timelapse: {timelapse:.4f} seconds'
 
 def benchmark_output(count):
     global folder
+    global total
+
     directory = 'exports/' + folder + '/benchmark.csv'
+    totalData = ['total', total]
     with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
-    total = 0
+        write_head.writerow(totalData)
+    
     for x in results:
         total = total + x[1]
 
