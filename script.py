@@ -121,8 +121,8 @@ def executeScript():
         # Hostname (ex. CE001, PE001)
         hostname = createHost(count, True)
         # Shape Averages THIS ISN'T WORKING 100%
-        shapeAvg1 = int((bandwidth * 10**5) * 0.97)
-        shapeAvg2 = int((bandwidth * 10**3) * 0.97)
+        shapeAvg1 = int((bandwidth * 10**6) * 0.97)
+        shapeAvg2 = int((bandwidth * 10**4) * 0.97)
         # Policy Maps (ex. 10MB)
         policy = str(bandwidth) + "MB"
         # IP address (ex. 192.168.88.1)
@@ -152,7 +152,7 @@ def executeScript():
         variableHolder['folder'] = str(folder)
         variableHolder['ceEth'] = str(ceEth)
         variableHolder['ceTun'] = str(ceTun)
-        variableHolder['bandwidthExtended'] = str(bandwidth) + "00"
+        variableHolder['bandwidthExtended'] = str(bandwidth) + "000"
         
         variableHolder['hostname2'] = str(hostname2)
         variableHolder['count'] = str(count)
@@ -227,7 +227,9 @@ def benchmark(hostname, start):
 
 
 def benchmark_output(count):
-    with open('benchmark.csv', 'w', newline='') as file:
+    global folder
+    directory = '/exports/' + folder + '/benchmark.csv'
+    with open(directory, 'w', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
     total = 0
