@@ -288,7 +288,7 @@ def benchmark_output(count):
     for x in results:
         total = total + x[1]
     
-    averageData = ['average', total/count:.4f]
+    averageData = ['average', total/count]
 
     with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
