@@ -217,7 +217,7 @@ def executeScript():
         )
 
         # print the stdout and error to the console
-        print("stdout: " + result.stdout)
+        #print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
         
 
@@ -228,7 +228,7 @@ def executeScript():
             [ansible, pePlaybook, vars, variableHolder],
             capture_output = True, text = True
         )
-        print("stdout: " + result.stdout)
+        #print("stdout: " + result.stdout)
         
         # Iterate nessicary counters and perform checks that they are within bounds
         if ipAddr >= 250:
@@ -244,11 +244,12 @@ def executeScript():
         if prefixAddr >= 250:
             prefixRange += 1
             prefixAddr = 1
+        # clear console
+        #os.system('cls' if os.name == 'nt' else 'clear')
 
         # Time the individual runs
         print(benchmark(hostname, start))
-        # clear console
-        os.system('cls' if os.name == 'nt' else 'clear')
+        
     # Time the total run time
     print(benchmark_output(count))
 
