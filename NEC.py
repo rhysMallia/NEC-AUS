@@ -57,7 +57,7 @@ variableDict = {}
 variableArray = []
 folder = ""
 results = []
-total = 0.0
+totalTime = 0.0
 devices = 0
 ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ... in this beautiful country"
 
@@ -270,21 +270,21 @@ def createHost(count, check):
 
 # This function will record run times for each PE and CE device
 def benchmark(hostname, start):
-    global total
+    global totalTime
     timelapse = time.perf_counter() - start
     result = [hostname, timelapse]
-    total += timelapse
+    totalTime += timelapse
     results.append(result)
     return f'config {hostname} generated, timelapse: {timelapse:.4f} seconds'
 
 # This function will create the benchmark for each run as well as generate nessicary extra data 
 def benchmark_output(count):
     global folder
-    global total
+    global totalTime
     global devices
 
     directory = 'exports/' + folder + '/benchmark.csv'
-    totalData = ['total devices: ' + str(devices) , total]
+    totalData = ['total devices: ' + str(devices) , totalTime]
     for x in results:
         total = total + x[1]
     
