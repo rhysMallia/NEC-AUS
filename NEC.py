@@ -283,10 +283,12 @@ def benchmark_output(count):
     global totalTime
     global devices
     total = 0
-    
+
     directory = 'exports/' + folder + '/benchmark.csv'
     totalData = ['total devices: ' + str(devices) , totalTime]
     for x in results:
+        print(x)
+        print(total)
         total = total + x[1]
     
     averageData = ['average', total/count]
