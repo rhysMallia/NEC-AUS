@@ -53,8 +53,14 @@ def main():
 def generateCSV():
     # Ask user for amount of devices
     amount = ""
-    while not isinstance(amount, int):
+    stop = True
+    while stop:
         amount = input("Please enter the amount of devices: ")
+        try:
+            int(amount)
+            stop = False
+        except ValueError:
+            print("Please enter a number!")
 
     # Send object to run ansible command
     result = subprocess.run(
