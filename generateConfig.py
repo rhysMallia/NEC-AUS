@@ -2,7 +2,7 @@ import csv
 import random
 import sys
 
-devices = 0
+devices = 502
 counter = 1
 header = ['No', ' ', 'bandwidth (MB)']
 bandwidth = [10, 20, 50, 100, 200, 300, 500, 1000]
@@ -13,11 +13,11 @@ def randomBandwidth():
 # check for extra vars
 if len(sys.argv) > 1:
     devices = int(sys.argv[0])
-else:
-    devices = 502
 
 # open the file ( with keyword means you don't have to close)
 with open('config.csv', 'w', encoding='UTF8', newline='') as f:
+    # inform user
+    print(str(devices) + " devices will be generated...")
 
     # Create the writer 
     writer = csv.writer(f)
