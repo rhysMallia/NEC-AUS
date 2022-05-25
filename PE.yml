@@ -106,11 +106,11 @@
             mode: '0644'
         
         # Router OSPF 
-        - name: Replace PEADDRESS2 (network)
+        - name: Replace IP ADDRESS (network)
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: 'network *** 0.0.0.0 area 0'
-            line:  network {{peaddress2}} 0.0.0.0 area 0 
+            line:  network {{peTun}} 0.0.0.0 area 0 
             owner: root
             group: root
             mode: '0644'
