@@ -20,6 +20,7 @@ import pandas as pd
 import hashlib as hash
 import datetime
 import time
+import generateConfig
 
 # constants
 defaultFileName = "config"
@@ -62,9 +63,8 @@ def generateCSV():
         except ValueError:
             print("Please enter a number!")
 
-    print("Generating python")
-    # Send object to run ansible command
-    subprocess.call("generateConfig.py")
+    # Run the python script
+    generateConfig.generateCSV()
 
 # Checks if the file is present, if not asks for user imput
 def fileInput():
