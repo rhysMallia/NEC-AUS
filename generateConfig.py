@@ -18,19 +18,19 @@ def generateCSV():
 
         # open the file ( with keyword means you don't have to close)
         with open('config.csv', 'w', encoding='UTF8', newline='') as f:
-        # inform user
-        print(str(devices) + " devices will be generated...")
+            # inform user
+            print(str(devices) + " devices will be generated...")
 
-        # Create the writer 
-        writer = csv.writer(f)
+            # Create the writer 
+            writer = csv.writer(f)
 
-        # Write the header
-        writer.writerow(header)
+            # Write the header
+            writer.writerow(header)
 
-        while(counter != devices):
-            data = [counter, '', randomBandwidth()]
-            writer.writerow(data)
-            counter += 1
+            while(counter != devices):
+                data = [counter, '', randomBandwidth()]
+                writer.writerow(data)
+                counter += 1
 
 if __name__ == '__main__':
     generateCSV()
