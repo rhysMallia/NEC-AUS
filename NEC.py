@@ -1,3 +1,34 @@
+# Created by VC-057-NEC
+# Rhys Mallia, Rafay Khokhar, Shiou-Ping Chu and Nathan Kaspers
+#   %%%%%%%%%%%%%#.                       .%%%%%%(     .%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%               .(#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.                            
+#   %%%%%%%%%%%%%%%%%#                    .%%%%%%(     .%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.                            
+#   %%%%%%%%%%%%%%%%%%%%.                 .%%%%%%(     .%%%%%%%%%%%%%%/                                 ,%%%%%%%%%%%%%%%%%#                                                    
+#   %%%%%%%%%%%%%%%%%%%%%%*               .%%%%%%(     .%%%%%%%%%%%%%%/                                %%%%%%%%%%%%%%%%,                                                       
+#   %%%%%%%%%%%%%%%%%%%%%%%%(             .%%%%%%(     .%%%%%%%%%%%%%%/                               %%%%%%%%%%%%%%%%                                                         
+#   %%%%%%%  #%%%%%%%%%%%%%%%%%           .%%%%%%(     .%%%%%%%%%%%%%%/                              %%%%%%%%%%%%%%#%                                                          
+#   %%%%%%%    (%%%%%%%%%%%%%%%%%         .%%%%%%(     .%%%%%%%%%%%%%#%%%%%%%%%%%%%%%%%%%%%%%%%      %%%%%%%%%%%%%%%*                                                          
+#   %%%%%%%      ,%%%%%%%%%%%%%%%%%/      .%%%%%%(     .%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     .%%%%%%%%%%%%%%%,                                                          
+#   %%%%%%%         %%%%%%%%%%%%%%%%%#    .%%%%%%(     .%%%%%%%%%%%%%%/                              %%%%%%%%%%%%%%%(                                                          
+#   %%%%%%%           #%%%%%%%%%%%%%%%%%  .%%%%%%(     .%%%%%%%%%%%%%%/                              #%%%%%%%%%%%%%%%                                                          
+#   %%%%%%%             (%%%%%%%%%%%%%%%%%,%%%%%%(     .%%%%%%%%%%%%%%(                               %%%%%%%%%%%%%%%%/                                                        
+#   %%%%%%%               ,#%%%%%%%%%%%%%%%%%%%%%(      %%%%%%%%%%%%%%%                                %%%%%%%%%%%%%%%%%#                                                      
+#   %%%%%%%                  %%%%%%%%%%%%%%%%%%%%(      (%%%%%%%%%%%%%%%%%%%######################.      %%%%%%%%%%%%%%%%%%%%(.               .*(#%                            
+#   %%%%%%%                    #%%%%%%%%%%%%%%%%%(        %#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.         *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                            
+#   (((((((                        ,(((((((((((((/             *(##%%%%%%%%%%%%%%%%%%%%%%%%%%%####.                *#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                            
+#                                                                                                                                                                           
+#                                                                                                                                                                           
+#                                                                                                                                                                           
+#                                                                                                                                                                           
+#                                                                                                                                                                           
+#                                                                                                                                                                            
+#                                        ##                                              (#  ,#,                                                                              
+#                                        #,(#                        #,                   (#                                                                                   
+#                                        #/  (#    ##    ##  #%       #,   ,##    ,    #.  (#   #   *    ##                                                                     
+#                                    ##((((##   ##    ##   ###*    #,   ,#     *#####(  (#   #   .######                                                                     
+#                                    ##      ##  ##    ##      .#   #*   ,#    (#    #(  (#   #  *#    ##                                                                     
+#                                                    *(,      /(/      *(,         //.               *(,  
+
+
 # Module imports
 import csv
 import sys, json, subprocess
@@ -30,6 +61,7 @@ total = 0.0
 devices = 0
 ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ... in this beautiful country"
 
+# The main functionality of the script
 def main(): 
     t_start = time.perf_counter()
     generateCSV()
@@ -40,7 +72,7 @@ def main():
     print(f"script time: { t_end - t_start} seconds")
     cleanup()
 
-# optional step which generates the CSV file 
+# optional step which generates the CSV file depending on the user's required device count
 def generateCSV():
     global devices
     # Ask user for amount of devices
@@ -231,6 +263,7 @@ def createHost(count, check):
     else:
         return secondaryHost + count
 
+# This function will record run times for each PE and CE device
 def benchmark(hostname, start):
     global total
     timelapse = time.perf_counter() - start
@@ -239,6 +272,7 @@ def benchmark(hostname, start):
     results.append(result)
     return f'config {hostname} generated, timelapse: {timelapse:.4f} seconds'
 
+# This function will create the benchmark for each run as well as generate nessicary extra data 
 def benchmark_output(count):
     global folder
     global total
@@ -256,7 +290,7 @@ def benchmark_output(count):
 
     return f'total time:{total:.4f} seconds ,average time:{total/count:.4f} seconds'
 
-# Clean up will delete the old csv and add a fresh blank
+# Clean up will delete the old csv and add a fresh blank for the next run
 def cleanup():
     os.remove('config.csv')
     with open('config.csv', 'w+', newline='') as file:
