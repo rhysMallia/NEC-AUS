@@ -111,11 +111,11 @@ def executeScript():
         
         ## Ethernet and Tunnel Prefixes
         # Ethernet Prefix
-        peEth = str(tunnel) + str(prefixRange) + str(prefixAddr)   
-        ceEth = str(tunnel) + str(prefixRange) + str(prefixAddr + 1)
+        peEth = str(tunnel) + str(prefixRange) + "." + str(prefixAddr)   
+        ceEth = str(tunnel) + str(prefixRange) + "." + str(prefixAddr + 1)
         # Tunnel Prefix
-        peTun = str(tunnel) + str(prefixRange) + str(prefixAddr + 4)
-        ceTun = str(tunnel) + str(prefixRange) + str(prefixAddr + 5)
+        peTun = str(tunnel) + str(prefixRange) + "." + str(prefixAddr + 4)
+        ceTun = str(tunnel) + str(prefixRange) + "." + str(prefixAddr + 5)
 
         ## CE
         # Hostname (ex. CE001, PE001)
@@ -152,7 +152,7 @@ def executeScript():
         variableHolder['folder'] = str(folder)
         variableHolder['ceEth'] = str(ceEth)
         variableHolder['ceTun'] = str(ceTun)
-        variableHolder['bandwidthExtended'] = str(bandwidth * 10*2)
+        variableHolder['bandwidthExtended'] = str(bandwidth) + "00"
         
         variableHolder['hostname2'] = str(hostname2)
         variableHolder['count'] = str(count)
