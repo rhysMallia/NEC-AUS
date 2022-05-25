@@ -83,7 +83,7 @@
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: 'bandwidth *'
-            line: bandwidth {{bandwidth}}
+            line: bandwidth {{bandwidthExtended}}
             owner: root
             group: root
             mode: '0644'

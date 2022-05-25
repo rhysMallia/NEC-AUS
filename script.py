@@ -152,6 +152,7 @@ def executeScript():
         variableHolder['folder'] = str(folder)
         variableHolder['ceEth'] = str(ceEth)
         variableHolder['ceTun'] = str(ceTun)
+        variableHolder['bandwidthExtended'] = str(bandwidth * 10*2)
         
         variableHolder['hostname2'] = str(hostname2)
         variableHolder['count'] = str(count)
