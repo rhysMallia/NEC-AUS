@@ -64,10 +64,7 @@ def generateCSV():
 
     print("Generating python")
     # Send object to run ansible command
-    result = subprocess.call("generateConfig.py", shell=True)
-
-    # print the stdout and error to the console
-    print("stdout: " + result.stdout)
+    subprocess.call("generateConfig.py", shell=True)
 
 # Checks if the file is present, if not asks for user imput
 def fileInput():
