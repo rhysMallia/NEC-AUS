@@ -36,6 +36,7 @@ variableDict = {}
 variableArray = []
 folder = ""
 results = []
+ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ..."
 
 def main(): 
     t_start = time.perf_counter()
@@ -102,9 +103,9 @@ def executeScript():
         # Start timer
         start = time.perf_counter()
         # Router description
-        desc = variableDict[1][rows]
+        desc = ceDesc
         # Bandwidth of connection
-        bandwidth = variableDict[2][rows]
+        bandwidth = variableDict[1][rows]
         # Dict to turn into JSON
         variableHolder = {}
         
