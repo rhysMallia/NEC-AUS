@@ -104,6 +104,7 @@ def executeScript():
         start = time.perf_counter()
         # Router description
         desc = ceDesc
+        print(variableDict[1][rows])
         # Bandwidth of connection
         bandwidth = variableDict[1][rows]
         # Dict to turn into JSON
