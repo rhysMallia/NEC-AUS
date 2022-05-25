@@ -245,7 +245,7 @@ def benchmark_output(count):
     global devices
 
     directory = 'exports/' + folder + '/benchmark.csv'
-    totalData = ['total devices: ' + devices , total]
+    totalData = ['total devices: ' + str(devices) , total]
     with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
