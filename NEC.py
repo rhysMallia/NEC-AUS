@@ -230,9 +230,6 @@ def executeScript():
         )
         print("stdout: " + result.stdout)
         
-        # clear console
-        os.system('cls' if os.name == 'nt' else 'clear')
-        
         # Iterate nessicary counters and perform checks that they are within bounds
         if ipAddr >= 250:
             ipRange += 1
@@ -250,6 +247,8 @@ def executeScript():
 
         # Time the individual runs
         print(benchmark(hostname, start))
+        # clear console
+        os.system('cls' if os.name == 'nt' else 'clear')
     # Time the total run time
     print(benchmark_output(count))
 
