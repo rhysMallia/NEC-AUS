@@ -25,7 +25,7 @@ def generateCSV(amount):
         # Write the header
         writer.writerow(header)
 
-        while(counter != amount):
+        while(counter >= amount):
             data = [counter, '', randomBandwidth()]
             writer.writerow(data)
             counter += 1
