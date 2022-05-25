@@ -91,7 +91,7 @@
         - name: Replace TUNNEL IPADDRESS
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'ip address ** 255.255.255.252'
+            search_string: 'ip address * 255.255.255.252'
             line: ip address {{ceTun}} 255.255.255.252
             owner: root
             group: root
@@ -146,7 +146,7 @@
         - name: Replace NETWORK
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'network * 0.0.0.0 area 0'
+            search_string: 'network ** 0.0.0.0 area 0'
             line: network {{ipaddress}} 0.0.0.0 area 0
             owner: root
             group: root
