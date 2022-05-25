@@ -62,6 +62,7 @@ def generateCSV():
         except ValueError:
             print("Please enter a number!")
 
+    print("Generating python")
     # Send object to run ansible command
     result = subprocess.run(
         [python3, generate, amount],

@@ -13,6 +13,7 @@ def randomBandwidth():
 # check for extra vars
 if len(sys.argv) > 1:
     devices = int(sys.argv[0])
+    print("extra vars found")
 
 # open the file ( with keyword means you don't have to close)
 with open('config.csv', 'w', encoding='UTF8', newline='') as f:
