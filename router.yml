@@ -133,12 +133,31 @@
             group: root
             mode: '0644'
 
+        # Interface (ethernet)
+        - name: Replace ETHERNET IPADDRESS 
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'ip address *** 255.255.255.252'
+            line: ip address {{ceEth}} 255.255.255.252
+            owner: root
+            group: root
+            mode: '0644'
+
         # Router OSPF 
         - name: Replace ROUTER-ID
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: 'router-id *'
             line: router-id {{ipaddress}} 
+            owner: root
+            group: root
+            mode: '0644'
+
+        - name: Replace NETWORK (10.)
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: ' network ** 0.0.0.0 area 0'
+            line: network {{ceTun}} 0.0.0.0 area 0
             owner: root
             group: root
             mode: '0644'
