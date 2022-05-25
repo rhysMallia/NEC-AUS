@@ -227,7 +227,7 @@ def benchmark(hostname, start):
 
 def benchmark_output(count):
     global folder
-    directory = '/exports/' + folder + '/benchmark.csv'
+    directory = 'exports/' + folder + '/benchmark.csv'
     with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
