@@ -110,11 +110,11 @@ def executeScript():
         
         ## Ethernet and Tunnel Prefixes
         # Ethernet Prefix
-        peEth = tunnel + prefixRange + prefixAddr   
-        ceEth = tunnel + prefixRange + (prefixAddr + 1)
+        peEth = str(tunnel) + str(prefixRange) + str(prefixAddr)   
+        ceEth = str(tunnel) + str(prefixRange) + str(prefixAddr + 1)
         # Tunnel Prefix
-        peTun = tunnel + prefixRange + (prefixAddr + 4)
-        ceTun = tunnel + prefixRange + (prefixAddr + 5)
+        peTun = str(tunnel) + str(prefixRange) + str(prefixAddr + 4)
+        ceTun = str(tunnel) + str(prefixRange) + str(prefixAddr + 5)
 
         ## CE
         # Hostname (ex. CE001, PE001)
