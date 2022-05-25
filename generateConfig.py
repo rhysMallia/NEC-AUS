@@ -1,7 +1,7 @@
 import csv
 import random
 
-devices = 501
+devices = 502
 counter = 1
 header = ['No', ' ', 'bandwidth (MB)']
 bandwidth = [10, 20, 50, 100, 200, 300, 500, 1000]
