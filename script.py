@@ -64,7 +64,7 @@ def generateCSV():
             print("Please enter a number!")
 
     # Run the python script
-    generateConfig.generateCSV()
+    generateConfig.generateCSV(amount)
 
 # Checks if the file is present, if not asks for user imput
 def fileInput():
