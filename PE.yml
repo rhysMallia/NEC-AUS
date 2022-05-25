@@ -26,7 +26,7 @@
         - name: Replace INTERFACE 
           ansible.builtin.lineinfile:
             path: "{{custom}}"           
-            search_string: 'interface Ethernet0/0.10101'
+            search_string: 'interface Ethernet0/0.**'
             line: interface Ethernet0/0.10{{interface}}
             owner: root
             group: root
@@ -54,7 +54,7 @@
         - name: Replace INTERFACE (TUNNEL)
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: 'interface Tunnel10**'
+            search_string: 'interface Tunnel**'
             line: interface Tunnel10{{interface}}
             owner: root
             group: root
@@ -74,6 +74,15 @@
             path: "{{custom}}"
             search_string: 'ip address **** 255.255.255.252'
             line:  ip address {{peTun}} 255.255.255.252
+            owner: root
+            group: root
+            mode: '0644'
+        
+        - name: Replace MD5
+          ansible.builtin.lineinfile:
+            path: "{{custom}}"
+            search_string: 'ip ospf message-digest-key 1 md5 7 *'
+            line:  ip ospf message-digest-key 1 md5 7 {{digestKey}}
             owner: root
             group: root
             mode: '0644'

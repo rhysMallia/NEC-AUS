@@ -36,7 +36,7 @@ variableDict = {}
 variableArray = []
 folder = ""
 results = []
-ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ..."
+ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ... in this beautiful country"
 
 def main(): 
     t_start = time.perf_counter()
