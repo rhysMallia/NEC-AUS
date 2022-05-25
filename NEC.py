@@ -1,17 +1,3 @@
-# TO DO (RHYS)
-# PE CONFIG GENERATION
-# ADD TUNNEL INFORMATION
-# GENERATE DESC
-# NETBOX IP(?)
-#
-#
-
-# TO DO (CHU)
-# LOGGING
-#   HOW LONG THIS SCRIPT TAKES TO RUN
-#   HOW MANY TIMES THIS HAS RUN
-#   TOTAL TIME SAVED
-
 # Module imports
 import csv
 import sys, json, subprocess
@@ -21,6 +7,7 @@ import hashlib as hash
 import datetime
 import time
 import generateConfig
+import os
 
 # constants
 defaultFileName = "config"
@@ -40,6 +27,7 @@ variableArray = []
 folder = ""
 results = []
 total = 0.0
+devices = 0
 ceDesc = "This device is fanstastic, truly, this device is one of the best, and built right here ... in this beautiful country"
 
 def main(): 
@@ -50,9 +38,11 @@ def main():
     executeScript()
     t_end = time.perf_counter()
     print(f"script time: { t_end - t_start} seconds")
+    cleanup()
 
 # optional step which generates the CSV file 
 def generateCSV():
+    global devices
     # Ask user for amount of devices
     amount = ""
     stop = True
@@ -64,6 +54,7 @@ def generateCSV():
         except ValueError:
             print("Please enter a number!")
 
+    devices = int(amount)
     # Run the python script
     generateConfig.generateCSV(amount)
 
@@ -251,9 +242,10 @@ def benchmark(hostname, start):
 def benchmark_output(count):
     global folder
     global total
+    global devices
 
     directory = 'exports/' + folder + '/benchmark.csv'
-    totalData = ['total', total]
+    totalData = ['total devices: ' + devices , total]
     with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
@@ -263,6 +255,13 @@ def benchmark_output(count):
         total = total + x[1]
 
     return f'total time:{total:.4f} seconds ,average time:{total/count:.4f} seconds'
+
+# Clean up will delete the old csv and add a fresh blank
+def cleanup():
+    os.remove('config.csv')
+    with open('config.csv', 'w+', newline='') as file:
+        print("Clean up successful, have a nice day :)")
+
 
 if __name__ == "__main__":
     main()

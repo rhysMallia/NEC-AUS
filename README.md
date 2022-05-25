@@ -1,7 +1,6 @@
-INSTALL ANSIBLE + PYTHON3 
-
+INSTALL ANSIBLE + PYTHON3 + hashlib and Pandas modules
 
 HOW TO RUN:
 CD INTO PROJECT FOLDER
-python3 script.py
+python3 NEC.py
 
