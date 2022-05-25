@@ -42,7 +42,7 @@ ceDesc = "This device is fanstastic, truly, this device is one of the best, and 
 
 def main(): 
     t_start = time.perf_counter()
-   #generateCSV()
+    generateCSV()
     fileInput()
     generateFolder()
     executeScript()
