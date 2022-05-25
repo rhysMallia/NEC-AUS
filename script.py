@@ -64,10 +64,7 @@ def generateCSV():
 
     print("Generating python")
     # Send object to run ansible command
-    result = subprocess.run(
-        [python3, generate, amount],
-        capture_output=True, text=True
-    )
+    result = subprocess.call("generateConfig.py", shell=True)
 
     # print the stdout and error to the console
     print("stdout: " + result.stdout)
