@@ -32,6 +32,8 @@ ansible = "ansible-playbook"
 playbook = "router.yml"
 pePlaybook = "PE.yml"
 vars = "--extra-vars"
+python3 = 'python3'
+generate = 'generateConfig.py'
 variableDict = {}
 variableArray = []
 folder = ""
@@ -40,12 +42,29 @@ ceDesc = "This device is fanstastic, truly, this device is one of the best, and 
 
 def main(): 
     t_start = time.perf_counter()
+    generateCSV()
     fileInput()
     generateFolder()
     executeScript()
     t_end = time.perf_counter()
     print(f"script time: { t_end - t_start} seconds")
-    
+
+# optional step which generates the CSV file 
+def generateCSV():
+    # Ask user for amount of devices
+    amount = ""
+    while not isinstance(amount, int):
+        amount = input("Please enter the amount of devices: ")
+
+    # Send object to run ansible command
+    result = subprocess.run(
+        [python3, generate, amount],
+        capture_output=True, text=True
+    )
+
+    # print the stdout and error to the console
+    print("stdout: " + result.stdout)
+
 # Checks if the file is present, if not asks for user imput
 def fileInput():
     # read default file    
