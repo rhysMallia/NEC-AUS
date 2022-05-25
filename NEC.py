@@ -285,13 +285,18 @@ def benchmark_output(count):
 
     directory = 'exports/' + folder + '/benchmark.csv'
     totalData = ['total devices: ' + str(devices) , total]
+    for x in results:
+        total = total + x[1]
+    
+    averageData = ['average', total/count:.4f]
+
     with open(directory, 'w+', newline='') as file:
         write_head = csv.writer(file, delimiter=',')
         write_head.writerows(results)
+        write_head.writerow(averageData)
         write_head.writerow(totalData)
     
-    for x in results:
-        total = total + x[1]
+    
 
     return f'total time:{total:.4f} seconds ,average time:{total/count:.4f} seconds'
 
