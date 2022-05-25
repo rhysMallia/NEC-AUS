@@ -220,6 +220,8 @@ def executeScript():
         print("stdout: " + result.stdout)
         #print("stderr: " + result.stderr)
         
+
+
         # Print statements for testing
         print("Generating PE configuration files for device no." + str(count) )
         result = subprocess.run(
@@ -227,6 +229,9 @@ def executeScript():
             capture_output = True, text = True
         )
         print("stdout: " + result.stdout)
+        
+        # clear console
+        os.system('cls' if os.name == 'nt' else 'clear')
         
         # Iterate nessicary counters and perform checks that they are within bounds
         if ipAddr >= 250:
