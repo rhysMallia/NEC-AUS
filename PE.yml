@@ -41,14 +41,15 @@
             group: root
             mode: '0644'
         
-        - name: Replace PEADDRESS
+        - name: Replace IP ADDRESS
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: ' ip address *** 255.255.255.252'
-            line:  ip address {{peaddress}} 255.255.255.252
+            line:  ip address {{peEth}} 255.255.255.252
             owner: root
             group: root
             mode: '0644'
+
         # Interface Tunnel
         - name: Replace INTERFACE (TUNNEL)
           ansible.builtin.lineinfile:
@@ -68,11 +69,11 @@
             group: root
             mode: '0644'
 
-        - name: Replace PEADDRESS2
+        - name: Replace IP ADDRESS
           ansible.builtin.lineinfile:
             path: "{{custom}}"
-            search_string: ' ip address ***** 255.255.255.252'
-            line:  ip address {{peaddress2}} 255.255.255.252
+            search_string: 'ip address **** 255.255.255.252'
+            line:  ip address {{peTun}} 255.255.255.252
             owner: root
             group: root
             mode: '0644'
@@ -81,16 +82,16 @@
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: 'tunnel source ****'
-            line: tunnel source {{peaddress}}
+            line: tunnel source {{peEth}}
             owner: root
             group: root
             mode: '0644'
 
-        - name: Replace TUNNEL SOURCE
+        - name: Replace TUNNEL DESTINATION
           ansible.builtin.lineinfile:
             path: "{{custom}}"
             search_string: 'tunnel destination ****'
-            line: tunnel destination {{tunnel}}
+            line: tunnel destination {{ceEth}}
             owner: root
             group: root
             mode: '0644'

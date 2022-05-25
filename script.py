@@ -92,11 +92,14 @@ def executeScript():
     rows = len(variableDict)
     # Interface counter
     interface = 100
-    
-
+    #Prefix
+    prefixAddr = 1
+    # Prefix range
+    prefixRange = 0
 
     # Iterate over every row and create the variables before launching the playbook
     for rows in range(0, rows):
+        # Start timer
         start = time.perf_counter()
         # Router description
         desc = variableDict[1][rows]
@@ -105,6 +108,14 @@ def executeScript():
         # Dict to turn into JSON
         variableHolder = {}
         
+        ## Ethernet and Tunnel Prefixes
+        # Ethernet Prefix
+        peEth = tunnel + prefixRange + prefixAddr   
+        ceEth = tunnel + prefixRange + (prefixAddr + 1)
+        # Tunnel Prefix
+        peTun = tunnel + prefixRange + (prefixAddr + 4)
+        ceTun = tunnel + prefixRange + (prefixAddr + 5)
+
         ## CE
         # Hostname (ex. CE001, PE001)
         hostname = createHost(count, True)
@@ -120,19 +131,14 @@ def executeScript():
         # MD5 Hash (ex. 001100101001md)
         temp = (hostname + desc + str(ipAddress) + str(bandwidth))
         digestKey = hash.md5(temp.encode('utf-8')).hexdigest()
-        
+       
         ## PE
         # Hostname
         hostname2 = createHost(count, False)
         # Count
         # Interface (ex. 101, 102)
         interface += 1
-        # PE Address (ex. 10.255.0.9)
-
-        # PE Address 2 (ex. 10.255.0.13)
-
-        # Tunnel (ex. 10.2555.0.10)
-
+        
         # Add to Dict object
         variableHolder['hostname'] = str(hostname)
         variableHolder['bandwidth'] = str(bandwidth)
@@ -143,13 +149,14 @@ def executeScript():
         variableHolder['policy'] = str(policy)
         variableHolder['digestKey'] = str(digestKey)
         variableHolder['folder'] = str(folder)
+        variableHolder['ceEth'] = str(ceEth)
+        variableHolder['ceTun'] = str(ceTun)
         
         variableHolder['hostname2'] = str(hostname2)
         variableHolder['count'] = str(count)
         variableHolder['interface'] = str(interface) 
-        variableHolder['peaddress'] = ""
-        variableHolder['peaddress2'] = ""
-        variableHolder['tunnel'] = ""
+        variableHolder['peEth'] = str(peEth)
+        variableHolder['peTun'] = str(peTun)
         #print(variableHolder)
         
         # Convert dict object to json
@@ -175,16 +182,24 @@ def executeScript():
         )
         print("stdout: " + result.stdout)
         
-        # Iterate nessicary counters
+        # Iterate nessicary counters and perform checks that they are within bounds
         if ipAddr >= 250:
             ipRange += 1
-            #ipAddr = 1
+            ipAddr = 1
         else:
             ipAddr += 1
         
         interface += 1
         count += 1
+
+        prefixAddr += 8
+        if prefixAddr >= 250:
+            prefixRange += 1
+            prefixAddr = 1
+
+        # Time the individual runs
         print(benchmark(hostname, start))
+    # Time the total run time
     print(benchmark_output(count))
 
 
@@ -201,8 +216,6 @@ def createHost(count, check):
         return hostname + count
     else:
         return secondaryHost + count
-
-
 
 def benchmark(hostname, start):
     timelapse = time.perf_counter() - start
